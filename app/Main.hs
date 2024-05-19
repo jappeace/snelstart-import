@@ -1,7 +1,7 @@
 
 module Main where
 
-import qualified Template
+import qualified SnelstartN26Import
 
 main :: IO ()
-main = Template.main
+main = SnelstartN26Import.main

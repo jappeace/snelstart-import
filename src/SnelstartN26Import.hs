@@ -1,4 +1,4 @@
-module Template
+module SnelstartN26Import
   ( main
   )
 where
