@@ -63,7 +63,7 @@ common common-options
 library
   import: common-options
   exposed-modules:
-      Snelstart-n26-import
+      SnelstartN26Import
   other-modules:
       Paths_snelstart-n26-import
   hs-source-dirs:
