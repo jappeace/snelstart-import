@@ -4,6 +4,7 @@ import qualified Data.Vector as Vector
 import SnelstartN26Import
 import Test.Tasty
 import Test.Tasty.HUnit
+import SnelstartN26Import.N26
 
 main :: IO ()
 main = defaultMain tests
@@ -16,7 +17,7 @@ unitTests =
   testGroup
     "Unit tests"
     [ testCase "List comparison (different length)" $ do
-        result <- SnelstartN26Import.readN26 "n26.csv"
+        result <- readN26 "n26.csv"
         result
           @?= Right
             ( Vector.fromList

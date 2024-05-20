@@ -48,7 +48,7 @@ common common-options
       NumericUnderscores
 
   ghc-options:
-    -O2 -Wall -Werror -Wincomplete-uni-patterns
+    -O2 -Wall -Wincomplete-uni-patterns
     -Wincomplete-record-updates -Widentities -Wredundant-constraints
     -Wcpp-undef -fwarn-tabs -Wpartial-fields
     -fdefer-diagnostics -Wunused-packages
@@ -60,9 +60,9 @@ common common-options
       cassava,
       text,
       time, 
-      attoparsec,
       bytestring,
-      vector
+      vector,
+      neat-interpolation
 
 
 
@@ -72,6 +72,9 @@ library
   import: common-options
   exposed-modules:
       SnelstartN26Import
+      SnelstartN26Import.N26
+      SnelstartN26Import.Snelstart
+      SnelstartN26Import.Currency
   hs-source-dirs:
       src
 
