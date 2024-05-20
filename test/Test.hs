@@ -1,40 +1,49 @@
 module Main where
 
+import qualified Data.Vector as Vector
+import SnelstartN26Import
 import Test.Tasty
-import Test.Tasty.QuickCheck as QC
 import Test.Tasty.HUnit
-
-import Data.List(sort)
-import qualified SnelstartN26Import
 
 main :: IO ()
 main = defaultMain tests
 
 tests :: TestTree
-tests = testGroup "Tests" [qcProps, unitTests]
-
-qcProps :: TestTree
-qcProps = testGroup "(checked by QuickCheck)"
-  [ QC.testProperty "sort == sort . reverse" $
-      \list -> sort (list :: [Int]) == sort (reverse list)
-  , QC.testProperty "Fermat's little theorem" $
-      \x -> ((x :: Integer)^zeven  - x) `mod` zeven == 0
-  ]
-  where
-    zeven :: Integer
-    zeven = 7
-
-oneTwoThree :: [Int]
-oneTwoThree = [1, 2, 3]
+tests = testGroup "Tests" [unitTests]
 
 unitTests :: TestTree
-unitTests = testGroup "Unit tests"
-  [ testCase "List comparison (different length)" $
-       oneTwoThree `compare` [1,2] @?= GT
-
-  -- the following test does not hold
-  , testCase "List comparison (same length)" $
-      oneTwoThree `compare` [1,2,3] @?= EQ
-  , testCase "run main" $ do
-      SnelstartN26Import.main
-  ]
+unitTests =
+  testGroup
+    "Unit tests"
+    [ testCase "List comparison (different length)" $ do
+        result <- SnelstartN26Import.readN26 "n26.csv"
+        result
+          @?= Right
+            ( Vector.fromList
+                [ N26
+                    { date = read "2024-05-03 00:00:00 UTC",
+                      payee = "ASR SCHADEVERZEKERING",
+                      accountNumber = "NL59ABNA0240576861",
+                      transactionType = DirectDebit,
+                      paymentReference = "55104021 Premie periode 01-05-2024 - 31-05-2024 Voordeelpakket Bedrijven",
+                      amountEur = -10.08,
+                      amountForegin = Nothing,
+                      typeForeign = "",
+                      exchangeRate = ""
+                    },
+                  N26
+                    { date = read "2024-05-04 00:00:00 UTC",
+                      payee = "CHATGPT SUBSCRIPTION",
+                      accountNumber = "",
+                      transactionType = MastercardPayment,
+                      paymentReference = "",
+                      amountEur = -22.62,
+                      amountForegin = Just (-24.2),
+                      typeForeign = "USD",
+                      exchangeRate = "0.9347107438"
+                    }
+                ]
+            ),
+      testCase "run main" $ do
+        SnelstartN26Import.main
+    ]

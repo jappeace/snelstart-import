@@ -60,7 +60,10 @@ common common-options
       cassava,
       text,
       time, 
-      attoparsec
+      attoparsec,
+      bytestring,
+      vector
+
 
 
   default-language: Haskell2010

@@ -1,6 +1,9 @@
 {-# LANGUAGE DeriveAnyClass #-}
 module SnelstartN26Import
-  ( main
+  ( main,
+    readN26,
+    N26 (..),
+    TransactionType(..)
   )
 where
 
@@ -9,14 +12,14 @@ import Data.Text.Encoding
 import Data.Csv
 import Data.Time
 import GHC.Generics
-import qualified Data.Attoparsec.Text as Atto
-import Data.Ratio
+import qualified Data.ByteString.Lazy as BS
+import Data.Vector
 
 data MutatieSoort = Overschijving | Diversen | Incasso
   deriving Show
 
-toCode :: MutatieSoort -> Text
-toCode = \case
+_toCode :: MutatieSoort -> Text
+_toCode = \case
   Overschijving -> "OV"
   Diversen -> "DV"
   Incasso -> "IC"
@@ -24,8 +27,8 @@ toCode = \case
 data BijAf = Bij | Af
   deriving Show
 
-newtype Currency = Currency Rational
-  deriving newtype Show
+newtype Currency = Currency Double
+  deriving newtype (Show, Eq, FromField, Num, Fractional)
 
 data Snelstart = Snelstart {
   datum :: UTCTime,
@@ -40,22 +43,8 @@ data Snelstart = Snelstart {
   deriving stock (Generic, Show)
 
 data TransactionType = MastercardPayment | OutgoingTransfer | Income | N26Referal | DirectDebit
-  deriving Show
+  deriving stock (Show, Eq)
 
-
-parseCurrency :: Atto.Parser Currency
-parseCurrency = do
-  nominals <- Atto.decimal `Atto.sepBy` Atto.char ','
-  case nominals of
-    one : two : [] -> pure $ Currency $ one % two
-    one : [] -> pure $ Currency $ one % 1
-    _ -> fail "to many or to few"
-
-instance FromField Currency where
-  parseField field = case Atto.parse parseCurrency $ decodeUtf8 field of
-    Atto.Done _ r -> pure r
-    Atto.Partial _ ->  fail $ "Currency.incomplete"
-    Atto.Fail _ s y -> fail $ "Currency.failed because " <> show (s,y)
 
 instance FromField TransactionType where
   parseField field = case decodeUtf8 field of
@@ -67,7 +56,7 @@ instance FromField TransactionType where
     other -> fail $ "TransactionType unkown" <> unpack other
 
 newtype Date = Date UTCTime
-  deriving newtype Show
+  deriving newtype (Show, Eq, Read)
 
 instance FromField Date where
   parseField field =
@@ -80,12 +69,18 @@ data N26 = N26  {
   transactionType :: TransactionType,
   paymentReference :: Text,
   amountEur :: Currency ,
-  amountForegin :: Currency ,
-  typeForeign :: Text
+  amountForegin :: Maybe Currency ,
+  typeForeign :: Text,
+  exchangeRate :: Text -- unused
   }
-  deriving stock (Generic, Show)
+  deriving stock (Generic, Show, Eq)
   deriving anyclass FromRecord
 
 
 main :: IO ()
 main = putStrLn "hello, world flaky"
+
+readN26 :: FilePath -> IO (Either String (Vector N26))
+readN26 path = do
+  lines' <- BS.readFile path
+  pure $ decode HasHeader lines'
