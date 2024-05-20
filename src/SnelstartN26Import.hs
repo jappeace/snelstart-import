@@ -33,7 +33,7 @@ toSnelstart ownAccoun N26{..} = Snelstart {
   tegenRekening  = accountNumber,
   mutatieSoort = toType transactionType , -- eg ook voor code
   bijAf = if amountEur < 0 then Af else Bij,
-  bedragEur = amountEur ,
+  bedragEur = abs amountEur ,
   mededeling = paymentReference
   }
 
