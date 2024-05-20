@@ -15,6 +15,8 @@ Dit is een snelstart importeer programma voor n26.
 Onderwater zet dit de gegevens om van n26 formaat naar
 dat van ING.
 
+Neem contact op met mij als er problemen zijn
+
 ### Tools
 Enter the nix shell.
 ```
