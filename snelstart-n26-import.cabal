@@ -56,10 +56,10 @@ common common-options
     -fno-omit-yields
 
   build-depends:
-      base >=4.9.1.0 && <4.20,
+      base >=4.9.1.0 && <4.20 || ^>=4.20.0,
       cassava,
       text,
-      time, 
+      time,
       bytestring,
       vector,
       neat-interpolation
