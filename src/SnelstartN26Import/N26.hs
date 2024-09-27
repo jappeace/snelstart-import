@@ -28,10 +28,12 @@ data TransactionType = MastercardPayment | OutgoingTransfer | Income | N26Refera
 
 instance FromField TransactionType where
   parseField field = case decodeUtf8 field of
-    "MasterCard Payment" -> pure MastercardPayment
-    "Outgoing Transfer" -> pure OutgoingTransfer
+    "Presentment" -> pure MastercardPayment
+    "Debit Transfer" -> pure OutgoingTransfer
     "Income" -> pure Income
-    "N26 Referral" -> pure N26Referal
+    "Credit Transfer" -> pure Income
+    "Presentment Refund" -> pure Income
+    "Reward" -> pure N26Referal
     "Direct Debit" -> pure DirectDebit
     other -> fail $ "TransactionType unkown" <> unpack other
 
@@ -43,15 +45,17 @@ instance FromField Date where
     fmap Date $ parseTimeM True defaultTimeLocale "%Y-%m-%d" $ unpack $ decodeUtf8 field
 
 data N26 = N26  {
-  date :: Date,
-  payee :: Text,
-  accountNumber :: Text,
+  date :: Date, -- booking date
+  valueDate :: Date,
+  payee :: Text, -- partner name
+  accountNumber :: Text, -- partner iban
   transactionType :: TransactionType,
   paymentReference :: Text,
-  amountEur :: Currency ,
-  amountForegin :: Maybe Currency ,
-  typeForeign :: Text,
-  exchangeRate :: Text -- unused
+  accountName :: Text,
+  amountEur :: Currency , -- amount (eur)
+  amountForegin :: Maybe Currency , -- original amount
+  typeForeign :: Text, -- original currency
+  exchangeRate :: Text
   }
   deriving stock (Generic, Show, Eq)
   deriving anyclass FromRecord

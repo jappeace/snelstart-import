@@ -51,4 +51,5 @@ main = do
       in
         BS.fromStrict header <> data'
 
+opts :: EncodeOptions
 opts = defaultEncodeOptions { encQuoting = QuoteAll}

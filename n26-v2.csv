@@ -1,0 +1,5 @@
+"Booking Date","Value Date","Partner Name","Partner Iban",Type,"Payment Reference","Account Name","Amount (EUR)","Original Amount","Original Currency","Exchange Rate"
+2024-07-10,2024-07-10,"MY COMPUTER",,Presentment,,"Main Account",-206.27,222.85,USD,0.9256001795
+2024-07-15,2024-07-15,"JT Klooster",NL74INGB0798449241,"Debit Transfer",,"Main Account",-800.00,,,
+2024-07-17,2024-07-17,"Oeverture belasting advies b.v.",NL90RABO0136021050,"Debit Transfer",,"Main Account",-1185.80,,,
+2024-07-17,2024-07-17,"Administratiekantoor De Wilde via Stichting Mollie Payments",NL51DEUT0265262461,"Debit Transfer","c37f91dbcae0a3e00b91496426f3c954 8152518244016285 20240754 Administratiekantoor De Wilde","Main Account",-656.43,,,
