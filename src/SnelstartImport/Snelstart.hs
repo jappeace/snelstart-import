@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE RecordWildCards #-}
 
-module SnelstartN26Import.Snelstart
+module SnelstartImport.Snelstart
   ( Snelstart(..),
     toCode,
     MutatieSoort (..),
@@ -9,7 +9,7 @@ module SnelstartN26Import.Snelstart
   )
 where
 
-import SnelstartN26Import.Currency
+import SnelstartImport.Currency
 import Data.Text
 import Data.Text.Encoding
 import Data.Csv

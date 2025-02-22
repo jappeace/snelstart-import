@@ -1,10 +1,10 @@
 module Main where
 
 import qualified Data.Vector as Vector
-import SnelstartN26Import
+import SnelstartImport
 import Test.Tasty
 import Test.Tasty.HUnit
-import SnelstartN26Import.N26
+import SnelstartImport.N26
 
 main :: IO ()
 main = defaultMain tests
@@ -46,5 +46,5 @@ unitTests =
                 ]
             ),
       testCase "run main" $ do
-        SnelstartN26Import.main
+        SnelstartImport.main
     ]

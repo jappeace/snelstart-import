@@ -1,5 +1,5 @@
 {-# LANGUAGE DeriveAnyClass #-}
-module SnelstartN26Import.N26
+module SnelstartImport.N26
   ( readN26,
     N26 (..),
     TransactionType(..),
@@ -7,7 +7,7 @@ module SnelstartN26Import.N26
   )
 where
 
-import SnelstartN26Import.Currency
+import SnelstartImport.Currency
 import Data.Text
 import Data.Text.Encoding
 import Data.Csv

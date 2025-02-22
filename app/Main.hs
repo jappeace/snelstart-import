@@ -1,7 +1,7 @@
 
 module Main where
 
-import qualified SnelstartN26Import
+import qualified SnelstartImport
 
 main :: IO ()
-main = SnelstartN26Import.main
+main = SnelstartImport.main

@@ -2,15 +2,15 @@
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE QuasiQuotes #-}
 
-module SnelstartN26Import
+module SnelstartImport
   ( main,
   )
 where
 
 import NeatInterpolation
 import qualified Data.ByteString.Lazy as BS
-import SnelstartN26Import.Snelstart
-import SnelstartN26Import.N26
+import SnelstartImport.Snelstart
+import SnelstartImport.N26
 import Data.Text (Text)
 import Data.Text.Encoding (encodeUtf8)
 import Data.Vector(toList)

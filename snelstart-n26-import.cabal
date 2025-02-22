@@ -71,10 +71,10 @@ common common-options
 library
   import: common-options
   exposed-modules:
-      SnelstartN26Import
-      SnelstartN26Import.N26
-      SnelstartN26Import.Snelstart
-      SnelstartN26Import.Currency
+      SnelstartImport
+      SnelstartImport.N26
+      SnelstartImport.Snelstart
+      SnelstartImport.Currency
   hs-source-dirs:
       src
 

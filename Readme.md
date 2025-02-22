@@ -6,7 +6,7 @@
 > In lyk persoan (sûnder skuld) is in ryk persoan
 
 Dit is een snelstart importeer programma voor n26.
-+ Pas SnelstartN26Import.hs met je account gegevens.
++ Pas SnelstartImport.hs met je account gegevens.
 + Exporteer n26 als csv en zet input.csv
 + nix develop
 + cabal run

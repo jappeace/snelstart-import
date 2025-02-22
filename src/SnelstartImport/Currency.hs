@@ -1,5 +1,5 @@
 {-# LANGUAGE DeriveAnyClass #-}
-module SnelstartN26Import.Currency
+module SnelstartImport.Currency
   ( Currency(..)
   )
 where
