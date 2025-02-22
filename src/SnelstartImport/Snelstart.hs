@@ -16,8 +16,6 @@ import Data.Text.Encoding
 import Data.Csv
 import Data.Time
 import GHC.Generics
-import qualified Data.ByteString.Lazy as BS
-import Data.Vector
 import qualified Data.Vector as Vector
 
 data MutatieSoort = Overschijving | Diversen | Incasso

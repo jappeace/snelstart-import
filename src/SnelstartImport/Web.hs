@@ -2,6 +2,8 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE TypeFamilies #-}
+{-# OPTIONS_GHC -Wno-orphans #-}
+
 
 -- | small web frontend
 module SnelstartImport.Web
@@ -9,13 +11,10 @@ module SnelstartImport.Web
   )
 where
 
-import Data.Text
-import           Options.Applicative
 import SnelstartImport.Options
-import Yesod.Core.Dispatch(parseRoutes, mkYesodData, mkYesodDispatch)
-import Yesod.Core(RenderRoute(..), Yesod(..), RenderMessage(..), toWaiApp)
+import Yesod.Core.Dispatch(mkYesodDispatch)
+import Yesod.Core(Yesod(..), toWaiApp)
 import Text.Blaze.Html(Html)
-import Yesod.Form.Fields(FormMessage(..), defaultFormMessage)
 import Network.Wai.Handler.Warp(run)
 import SnelstartImport.Web.Routes
 

@@ -64,7 +64,6 @@ common common-options
       vector,
       neat-interpolation,
       optparse-applicative,
-      yesod,
       yesod-core,
       blaze-html,
       yesod-form,

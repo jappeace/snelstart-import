@@ -62,17 +62,17 @@ main = do
 
 convertCli :: CliOptions -> IO ()
 convertCli options = do
-  result <- readN26 "input.csv"
+  result <- readN26 (cliInputFile options)
   case result of
     Left x -> error x
-    Right n26Vec -> BS.writeFile "out.csv" $ let
+    Right n26Vec -> BS.writeFile (cliOutputFile options) $ let
         n26 :: [Snelstart ]
-        n26 = toSnelstart "DE92100110012623092722" <$> toList n26Vec
+        n26 = toSnelstart (cliOwnAccount options) <$> toList n26Vec
         data' :: ByteString
         data' = encodeWith opts n26
-        header = encodeUtf8 $ [text|"Datum","Naam / Omschrijving","Rekening","Tegenrekening","Code","Af Bij","Bedrag (EUR)","Mutatiesoort","Mededelingen"|] <> "\n"
+        header' = encodeUtf8 $ [text|"Datum","Naam / Omschrijving","Rekening","Tegenrekening","Code","Af Bij","Bedrag (EUR)","Mutatiesoort","Mededelingen"|] <> "\n"
       in
-        BS.fromStrict header <> data'
+        BS.fromStrict header' <> data'
 
 opts :: EncodeOptions
 opts = defaultEncodeOptions { encQuoting = QuoteAll}

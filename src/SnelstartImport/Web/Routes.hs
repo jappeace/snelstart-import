@@ -2,7 +2,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE TypeFamilies #-}
-{-# OPTIONS_GHC -ddump-splices #-}
 
 -- | routes for the app, seperated due to stage restriction
 module SnelstartImport.Web.Routes
@@ -10,18 +9,14 @@ module SnelstartImport.Web.Routes
     resourcesApp,
     App(..),
     Handler,
-    Route(..)
+    Route(..),
+    Widget
   )
 where
 
-import Data.Text
-import           Options.Applicative
-import SnelstartImport.Options
 import Yesod.Core.Dispatch(parseRoutes, mkYesodData)
-import Yesod.Core(RenderRoute(..), Yesod(..), RenderMessage(..), toWaiApp)
-import Text.Blaze.Html(Html)
+import Yesod.Core(RenderRoute(..), RenderMessage(..))
 import Yesod.Form.Fields(FormMessage(..), defaultFormMessage)
-import Network.Wai.Handler.Warp(run)
 
 data App = App
 
