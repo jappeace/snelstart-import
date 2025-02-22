@@ -16,6 +16,21 @@ import Data.Text.Encoding (encodeUtf8)
 import Data.Vector(toList)
 import Data.Csv(EncodeOptions (..), defaultEncodeOptions, Quoting (..), encodeWith)
 import Data.ByteString.Lazy (ByteString)
+import SnelstartImport.Options
+import Paths_snelstart_import (version)
+import           Options.Applicative
+import Text.Printf
+import Data.Version (showVersion)
+
+currentVersion :: String
+currentVersion = showVersion version
+
+readSettings :: IO (ProgramOptions)
+readSettings = customExecParser (prefs showHelpOnError) $ info
+  (helper <*> parseProgram)
+  (fullDesc <> header (printf "Snelstart importer %s" currentVersion) <> progDesc
+    "Converts various banks and programs to something snelstart understands"
+  )
 
 toType :: TransactionType -> MutatieSoort
 toType = \case
@@ -39,6 +54,13 @@ toSnelstart ownAccoun N26{..} = Snelstart {
 
 main :: IO ()
 main = do
+  settings <- readSettings
+  case settings of
+    Convert cli -> convertCli cli
+    Webserver -> putStrLn "TODO spin up webserver"
+
+convertCli :: CliOptions -> IO ()
+convertCli options = do
   result <- readN26 "input.csv"
   case result of
     Left x -> error x

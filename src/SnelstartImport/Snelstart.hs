@@ -1,6 +1,7 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE RecordWildCards #-}
 
+-- | We target the ING bank as the output format
 module SnelstartImport.Snelstart
   ( Snelstart(..),
     toCode,
