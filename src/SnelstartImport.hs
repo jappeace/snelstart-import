@@ -21,6 +21,7 @@ import Paths_snelstart_import (version)
 import           Options.Applicative
 import Text.Printf
 import Data.Version (showVersion)
+import SnelstartImport.Web
 
 currentVersion :: String
 currentVersion = showVersion version
@@ -57,7 +58,7 @@ main = do
   settings <- readSettings
   case settings of
     Convert cli -> convertCli cli
-    Webserver -> putStrLn "TODO spin up webserver"
+    Webserver options -> webMain options
 
 convertCli :: CliOptions -> IO ()
 convertCli options = do

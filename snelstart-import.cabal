@@ -63,7 +63,14 @@ common common-options
       bytestring,
       vector,
       neat-interpolation,
-      optparse-applicative
+      optparse-applicative,
+      yesod,
+      yesod-core,
+      blaze-html,
+      yesod-form,
+      warp
+
+
 
 
 
@@ -77,6 +84,8 @@ library
       SnelstartImport.Snelstart
       SnelstartImport.Currency
       SnelstartImport.Options
+      SnelstartImport.Web.Routes
+      SnelstartImport.Web
   hs-source-dirs:
       src
   other-modules:

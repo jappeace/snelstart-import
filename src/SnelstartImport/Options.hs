@@ -5,7 +5,8 @@
 module SnelstartImport.Options
   ( parseProgram,
     CliOptions(..),
-    ProgramOptions (..)
+    ProgramOptions (..),
+    WebOptions(..)
   )
 where
 
@@ -18,8 +19,24 @@ data CliOptions = CliOptions {
   , cliOutputFile :: FilePath
   }
 
+data WebOptions = WebOptions {
+  webPort :: Int
+  }
+
 data ProgramOptions = Convert CliOptions
-                    | Webserver
+                    | Webserver WebOptions
+
+parseWebOptions :: Parser WebOptions
+parseWebOptions = do
+  webPort <- (option
+            auto
+            (  long "port"
+            <> help
+                 "port to bind on"
+            <> value 3005
+            )
+          )
+  pure $ WebOptions{..}
 
 parseCli :: Parser CliOptions
 parseCli = do
@@ -34,4 +51,4 @@ parseProgram =
   subparser $
     command "convert" (info (Convert <$> parseCli <**> helper) $ progDesc "Convert from cli to snelstart format")
     <>
-    command "server" (info (pure Webserver) $ progDesc "Start a server to give a UI to do conversion")
+    command "server" (info (Webserver <$> parseWebOptions <**> helper) $ progDesc "Start a server to give a UI to do conversion")
