@@ -2,6 +2,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE UndecidableInstances #-}
 
 -- | routes for the app, seperated due to stage restriction
 module SnelstartImport.Web.Routes
@@ -17,13 +18,15 @@ where
 import Yesod.Core.Dispatch(parseRoutes, mkYesodData)
 import Yesod.Core(RenderRoute(..), RenderMessage(..))
 import Yesod.Form.Fields(FormMessage(..), defaultFormMessage)
+import Yesod.Core
 
 data App = App
 
 instance RenderMessage App FormMessage where
   renderMessage _ _ = defaultFormMessage
 
+instance RenderRoute App => Yesod App
 
 mkYesodData "App" [parseRoutes|
-/ RootR GET
+/ RootR GET POST
 |]

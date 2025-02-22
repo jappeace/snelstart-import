@@ -14,17 +14,12 @@ where
 import SnelstartImport.Options
 import Yesod.Core.Dispatch(mkYesodDispatch)
 import Yesod.Core(Yesod(..), toWaiApp)
-import Text.Blaze.Html(Html)
 import Network.Wai.Handler.Warp(run)
 import SnelstartImport.Web.Routes
-
-getRootR :: Handler Html
-getRootR =
-  pure "hello world"
+import SnelstartImport.Web.Handler
 
 mkYesodDispatch "App" resourcesApp
 
-instance Yesod App
 
 webMain :: WebOptions -> IO ()
 webMain options = do

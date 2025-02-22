@@ -84,6 +84,7 @@ library
       SnelstartImport.Currency
       SnelstartImport.Options
       SnelstartImport.Web.Routes
+      SnelstartImport.Web.Handler
       SnelstartImport.Web
   hs-source-dirs:
       src
