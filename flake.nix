@@ -25,7 +25,7 @@
       inherit pkgs;
       devShell.x86_64-linux = hpkgs.shellFor {
         packages = ps : [ ps."snelstart-import" ];
-        withHoogle = true;
+        withHoogle = false;
 
         buildInputs = [
           hpkgs.haskell-language-server
