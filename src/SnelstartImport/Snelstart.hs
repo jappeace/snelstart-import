@@ -63,7 +63,7 @@ instance ToRecord Snelstart where
       , toField tegenRekening
       , toField $ toCode mutatieSoort
       , toField $ bijAfToField bijAf
-      , toField $ replaceDotWithComma <$>  show bedragEur
+      , toField $ replaceDotWithComma <$>  Prelude.show bedragEur
       , toField $ mutatieSoortToFIeld mutatieSoort
       , toField mededeling
       ]
