@@ -12,3 +12,4 @@ TAGS
 /.direnv/
 /input.csv
 /out.csv
+/client_session_key.aes

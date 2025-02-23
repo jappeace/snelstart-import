@@ -4,10 +4,10 @@ cabal-version:      3.0
 --
 -- see: https://github.com/sol/hpack
 
-name:           snelstart-n26-import
+name:           snelstart-import
 version:        1.0.0
-homepage:       https://github.com/jappeace/snelstart-n26-import#readme
-bug-reports:    https://github.com/jappeace/snelstart-n26-import/issues
+homepage:       https://github.com/jappeace/snelstart-import#readme
+bug-reports:    https://github.com/jappeace/snelstart-import/issues
 author:         Jappie Klooster
 maintainer:     jappieklooster@hotmail.com
 copyright:      2020 Jappie Klooster
@@ -22,7 +22,7 @@ extra-doc-files:
 
 source-repository head
   type: git
-  location: https://github.com/jappeace/snelstart-n26-import
+  location: https://github.com/jappeace/snelstart-import
 
 common common-options
   default-extensions: 
@@ -62,7 +62,14 @@ common common-options
       time, 
       bytestring,
       vector,
-      neat-interpolation
+      neat-interpolation,
+      optparse-applicative,
+      yesod-core,
+      blaze-html,
+      yesod-form,
+      warp
+
+
 
 
 
@@ -71,12 +78,18 @@ common common-options
 library
   import: common-options
   exposed-modules:
-      SnelstartN26Import
-      SnelstartN26Import.N26
-      SnelstartN26Import.Snelstart
-      SnelstartN26Import.Currency
+      SnelstartImport
+      SnelstartImport.N26
+      SnelstartImport.Snelstart
+      SnelstartImport.Currency
+      SnelstartImport.Options
+      SnelstartImport.Web.Routes
+      SnelstartImport.Web.Handler
+      SnelstartImport.Web
   hs-source-dirs:
       src
+  other-modules:
+      Paths_snelstart_import
 
 executable exe
   import: common-options
@@ -84,7 +97,7 @@ executable exe
   hs-source-dirs:
       app
   build-depends:
-      snelstart-n26-import
+      snelstart-import
   ghc-options: -Wno-unused-packages
 
 test-suite unit
@@ -98,4 +111,4 @@ test-suite unit
       tasty,
       tasty-hunit,
       tasty-quickcheck,
-      snelstart-n26-import
+      snelstart-import

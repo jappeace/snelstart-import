@@ -1,7 +1,8 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE RecordWildCards #-}
 
-module SnelstartN26Import.Snelstart
+-- | We target the ING bank as the output format
+module SnelstartImport.Snelstart
   ( Snelstart(..),
     toCode,
     MutatieSoort (..),
@@ -9,14 +10,12 @@ module SnelstartN26Import.Snelstart
   )
 where
 
-import SnelstartN26Import.Currency
+import SnelstartImport.Currency
 import Data.Text
 import Data.Text.Encoding
 import Data.Csv
 import Data.Time
 import GHC.Generics
-import qualified Data.ByteString.Lazy as BS
-import Data.Vector
 import qualified Data.Vector as Vector
 
 data MutatieSoort = Overschijving | Diversen | Incasso
@@ -64,7 +63,7 @@ instance ToRecord Snelstart where
       , toField tegenRekening
       , toField $ toCode mutatieSoort
       , toField $ bijAfToField bijAf
-      , toField $ replaceDotWithComma <$>  show bedragEur
+      , toField $ replaceDotWithComma <$>  Prelude.show bedragEur
       , toField $ mutatieSoortToFIeld mutatieSoort
       , toField mededeling
       ]
