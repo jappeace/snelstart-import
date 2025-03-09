@@ -1,22 +1,27 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE QuasiQuotes #-}
 
 -- | We target the ING bank as the output format
-module SnelstartImport.Snelstart
-  ( Snelstart(..),
+module SnelstartImport.ING
+  ( ING(..),
     toCode,
+    writeCsv,
     MutatieSoort (..),
     BijAf(..)
   )
 where
 
 import SnelstartImport.Currency
+import Data.Text.Encoding (encodeUtf8)
 import Data.Text
 import Data.Text.Encoding
 import Data.Csv
 import Data.Time
 import GHC.Generics
 import qualified Data.Vector as Vector
+import NeatInterpolation(text)
+import qualified Data.ByteString.Lazy as LBS
 
 data MutatieSoort = Overschijving | Diversen | Incasso
   deriving Show
@@ -42,7 +47,7 @@ bijAfToField = \case
   Af -> "Af"
 
 
-data Snelstart = Snelstart {
+data ING = ING {
   datum :: UTCTime,
   naamBescrhijving :: Text,
   rekening :: Text,
@@ -54,8 +59,8 @@ data Snelstart = Snelstart {
   }
   deriving stock (Generic, Show)
 
-instance ToRecord Snelstart where
-  toRecord (Snelstart{..}) =
+instance ToRecord ING where
+  toRecord (ING{..}) =
     Vector.fromList
       [ toField $ formatTime defaultTimeLocale "%Y%m%d" datum
       , toField naamBescrhijving
@@ -91,3 +96,13 @@ instance FromField Date where
   parseField field =
     fmap Date $ parseTimeM True defaultTimeLocale "%Y-%m-%d" $ unpack $ decodeUtf8 field
 
+
+writeCsv :: [ING] -> LBS.ByteString
+writeCsv lines = LBS.fromStrict header' <> data'
+  where
+        data' :: LBS.ByteString
+        data' = encodeWith opts lines
+        header' = encodeUtf8 $ [text|"Datum","Naam / Omschrijving","Rekening","Tegenrekening","Code","Af Bij","Bedrag (EUR)","Mutatiesoort","Mededelingen"|] <> "\n"
+
+opts :: EncodeOptions
+opts = defaultEncodeOptions { encQuoting = QuoteAll}
