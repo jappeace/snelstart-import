@@ -80,7 +80,8 @@ library
   exposed-modules:
       SnelstartImport
       SnelstartImport.N26
-      SnelstartImport.Snelstart
+      SnelstartImport.ING
+      SnelstartImport.Convert
       SnelstartImport.Currency
       SnelstartImport.Options
       SnelstartImport.Web.Routes
