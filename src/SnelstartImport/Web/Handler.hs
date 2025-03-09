@@ -10,7 +10,12 @@ module SnelstartImport.Web.Handler
   )
 where
 
+import Data.Vector(toList)
+import qualified Data.ByteString.Lazy as LBS
+import SnelstartImport.Convert
+import SnelstartImport.ING
 import SnelstartImport.Web.Routes
+import SnelstartImport.N26
 import Text.Blaze.Html(Html)
 import Yesod.Form
 import Yesod.Core.Widget
@@ -18,6 +23,8 @@ import Yesod.Core.Handler
 import Data.Text
 import Yesod.Core(defaultLayout)
 import Data.Text.Encoding
+import Data.ByteString.Base64
+import Data.Base64.Types(extractBase64)
 
 
 type Form a = Html -> MForm Handler (FormResult a, Widget)
@@ -76,20 +83,26 @@ postRootR = do
     FormSuccess suc -> do
       contents <- fileSourceByteString $ ifFileInfo suc
 
+      case readN26BS $ LBS.fromStrict contents of
+        Left err -> defaultLayout $ inputForm [pack err] enctype form
+        Right n26 -> let
+            csvOut :: LBS.ByteString
+            csvOut = writeCsv (toING (ifBank suc) <$> toList n26)
+            contentText = decodeUtf8 $ LBS.toStrict csvOut
+            downloadText = "data:text/plain;base64," <> (extractBase64 $ encodeBase64 $ LBS.toStrict csvOut)
+          in
+            defaultLayout $ [whamlet|
+                <table>
+                  <tr>
+                    <th>bank
+                    <td>#{ifBank suc}
+                  <tr>
+                    <th>filename
+                    <td>#{fileName $ ifFileInfo suc}
 
-
-      let contentText = decodeUtf8 contents
-
-      defaultLayout $ [whamlet|
-              <table>
-                <tr>
-                  <th>bank
-                  <td>#{ifBank suc}
-                <tr>
-                  <th>filename
-                  <td>#{fileName $ ifFileInfo suc}
-
-              <h2>contents
-              <pre>
-                #{contentText}
-              |]
+                <h2>contents
+                <a href=#{downloadText} download="hello.txt"> Download
+                <pre>
+                  <code>
+                    #{contentText}
+                |]
