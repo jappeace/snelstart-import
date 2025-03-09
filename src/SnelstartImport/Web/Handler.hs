@@ -75,7 +75,11 @@ postRootR = do
     FormFailure x   -> defaultLayout $ inputForm x enctype form
     FormSuccess suc -> do
       contents <- fileSourceByteString $ ifFileInfo suc
+
+
+
       let contentText = decodeUtf8 contents
+
       defaultLayout $ [whamlet|
               <table>
                 <tr>

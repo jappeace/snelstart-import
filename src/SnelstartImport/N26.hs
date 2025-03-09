@@ -1,6 +1,7 @@
 {-# LANGUAGE DeriveAnyClass #-}
 module SnelstartImport.N26
   ( readN26,
+    readN26BS,
     N26 (..),
     TransactionType(..),
     Date(..)
@@ -64,4 +65,8 @@ data N26 = N26  {
 readN26 :: FilePath -> IO (Either String (Vector N26))
 readN26 path = do
   lines' <- BS.readFile path
-  pure $ decode HasHeader lines'
+  pure $ readN26BS lines'
+
+
+readN26BS :: BS.ByteString -> Either String (Vector N26)
+readN26BS = decode HasHeader

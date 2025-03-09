@@ -22,6 +22,7 @@ import           Options.Applicative
 import Text.Printf
 import Data.Version (showVersion)
 import SnelstartImport.Web
+import SnelstartImport.Convert
 
 currentVersion :: String
 currentVersion = showVersion version
@@ -33,25 +34,6 @@ readSettings = customExecParser (prefs showHelpOnError) $ info
     "Converts various banks and programs to something snelstart understands"
   )
 
-toType :: TransactionType -> MutatieSoort
-toType = \case
-  MastercardPayment -> Diversen
-  OutgoingTransfer -> Overschijving
-  Income -> Overschijving
-  N26Referal -> Diversen
-  DirectDebit -> Overschijving
-
-toSnelstart :: Text -> N26 -> Snelstart
-toSnelstart ownAccoun N26{..} = Snelstart {
-  datum = unDate date,
-  naamBescrhijving = payee,
-  rekening = ownAccoun,
-  tegenRekening  = accountNumber,
-  mutatieSoort = toType transactionType , -- eg ook voor code
-  bijAf = if amountEur < 0 then Af else Bij,
-  bedragEur = abs amountEur ,
-  mededeling = paymentReference
-  }
 
 main :: IO ()
 main = do
@@ -68,11 +50,5 @@ convertCli options = do
     Right n26Vec -> BS.writeFile (cliOutputFile options) $ let
         n26 :: [Snelstart ]
         n26 = toSnelstart (cliOwnAccount options) <$> toList n26Vec
-        data' :: ByteString
-        data' = encodeWith opts n26
-        header' = encodeUtf8 $ [text|"Datum","Naam / Omschrijving","Rekening","Tegenrekening","Code","Af Bij","Bedrag (EUR)","Mutatiesoort","Mededelingen"|] <> "\n"
       in
-        BS.fromStrict header' <> data'
-
-opts :: EncodeOptions
-opts = defaultEncodeOptions { encQuoting = QuoteAll}
+        writeCsv n26
