@@ -2,7 +2,8 @@
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE QuasiQuotes #-}
 
--- | We target the ING bank as the output format
+-- | We target the ING bank as the output format.
+--   "snelstart" understands this csv format
 module SnelstartImport.ING
   ( ING(..),
     toCode,
