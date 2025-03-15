@@ -3,7 +3,7 @@
 [![Jappiejappie](https://img.shields.io/badge/discord-jappiejappie-black?logo=discord)](https://discord.gg/Hp4agqy)
 [![Hackage version](https://img.shields.io/hackage/v/template.svg?label=Hackage)](https://hackage.haskell.org/package/template) 
 
-> In lyk persoan (sûnder skuld) is in ryk persoan
+> In lyk man is in ryk man
 
 Dit is een snelstart importeer programma voor n26.
 + Pas SnelstartImport.hs met je account gegevens.
