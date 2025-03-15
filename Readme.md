@@ -17,6 +17,17 @@ dat van ING.
 
 Neem contact op met mij als er problemen zijn
 
+
+### Architecture
+
+generally we go:
+
+1. parse raw (potential partial) format such as csv or xml,
+2. then go to typed intermiedatry (eg SepaDirectCoreScheme, or N26).
+3. then go to ING.
+4. write out ING
+
+
 ### Tools
 Enter the nix shell.
 ```
