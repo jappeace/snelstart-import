@@ -28,6 +28,7 @@ import Data.Base64.Types(extractBase64)
 import qualified Data.Text as Text
 import qualified Data.ByteString.Char8 as Char8
 import SnelstartImport.SepaDirectCoreScheme(readSepaDirectCoreScheme)
+import SnelstartImport.Convert(sepaDirectCoreSchemeToING)
 
 
 type Form a = Html -> MForm Handler (FormResult a, Widget)
@@ -87,19 +88,17 @@ postRootR = do
       contents <- fileSourceByteString $ ifFileInfo formRes
       let filename = fileName $ ifFileInfo formRes
       if Text.isSuffixOf "xml" filename then
-        renderDownloadBS formRes (LBS.fromStrict $ Char8.pack $ show $ readSepaDirectCoreScheme contents)
+        case readSepaDirectCoreScheme contents of
+          Left err -> defaultLayout $ inputForm [pack $ show err] enctype form
+          Right res -> renderDownload formRes (sepaDirectCoreSchemeToING (ifBank formRes) <$> res)
       else case readN26BS $ LBS.fromStrict contents of
         Left err -> defaultLayout $ inputForm [pack err] enctype form
         Right n26 -> renderDownload formRes (n26ToING (ifBank formRes) <$> toList n26)
 
 renderDownload :: InputFileForm -> [ING] -> Handler Html
-renderDownload form ings = renderDownloadBS form (writeCsv ings)
-
-
-
-renderDownloadBS :: InputFileForm -> LBS.ByteString -> Handler Html
-renderDownloadBS form csvOut =
+renderDownload form ings =
           let
+            csvOut  = (writeCsv ings)
             contentText = decodeUtf8 $ LBS.toStrict csvOut
             downloadText = "data:text/plain;base64," <> (extractBase64 $ encodeBase64 $ LBS.toStrict csvOut)
           in

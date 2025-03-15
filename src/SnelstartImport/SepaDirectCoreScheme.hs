@@ -33,9 +33,6 @@ data SepaDirectCoreScheme = SepaDirectCoreScheme {
   dtOfSgntr :: Day
   } deriving Show
 
-tshow :: Show a => a -> Text
-tshow = pack . show
-
 name_ :: Node -> Text
 name_ = Text.toLower . decodeUtf8 . name
 
@@ -54,8 +51,8 @@ readSepaDirectCoreScheme contents = do
 --
 
 data SepaIssues = ExpectedOne [Node] Text
-                | ExpectedNumber Text Text
-                | ExpectedDate Text
+                | ExpectedNumber Node Text
+                | ExpectedDate Node Text
                 deriving Show
 
 
@@ -68,14 +65,14 @@ assertOne label nodes =
 inner_ :: Node -> Text
 inner_ = decodeUtf8 . inner
 
-parseCurrency :: Text -> Text -> Either SepaIssues Currency
-parseCurrency label txt = case readMaybe (Text.unpack txt) of
+parseCurrency :: Node -> Either SepaIssues Currency
+parseCurrency node = case readMaybe (Text.unpack (inner_ node)) of
   Just number -> Right $ Currency number
-  Nothing -> Left (ExpectedNumber label txt)
+  Nothing -> Left (ExpectedNumber node (inner_ node))
 
-parseDay :: Text -> Text -> Either SepaIssues Day
-parseDay label txt = case parseTimeM True defaultTimeLocale "%F" (Text.unpack txt) of
-  Nothing -> Left $ ExpectedDate label
+parseDay :: Node -> Either SepaIssues Day
+parseDay node = case parseTimeM True defaultTimeLocale "%F" (Text.unpack (inner_ node)) of
+  Nothing -> Left $ ExpectedDate node (inner_ node)
   Just day -> Right day
 
 parseSepa :: Node -> Either SepaIssues SepaDirectCoreScheme
@@ -83,8 +80,8 @@ parseSepa node = do
   dbtr <- inner_ <$> assertOne "dbtr" (dig "nm" =<< dig "dbtr" node)
   dbtrAcct <- inner_ <$> assertOne "dbtracct" (dig "IBAN" =<< dig "Id" =<< dig "DbtrAcct" node)
   endToEndId <- inner_ <$> assertOne "endToEndId" (dig "EndToEndId" =<< dig "PmtId" node)
-  instdAmt <- parseCurrency "instdAmt" . inner_ =<< assertOne "instdAmt" (dig "instdAmt" node)
-  dtOfSgntr <- parseDay "dtOfSgntr" . inner_ =<< assertOne "dtOfSgntr" (dig "DtOfSgntr" =<< dig "MndtRltdInf" =<< dig "DrctDbtTx" node)
+  instdAmt <- parseCurrency =<< assertOne "instdAmt" (dig "instdAmt" node)
+  dtOfSgntr <- parseDay =<< assertOne "dtOfSgntr" (dig "DtOfSgntr" =<< dig "MndtRltdInf" =<< dig "DrctDbtTx" node)
   Right $ SepaDirectCoreScheme {
     ..
     }
