@@ -17,6 +17,11 @@
       hpkgs = pkgs.haskellPackages.override {
         overrides = hnew: hold: {
           snelstart-import = hnew.callCabal2nix "snelstart-import" ./. { };
+          base64 = hnew.callHackageDirect {
+              pkg = "base64";
+              ver = "1.0";
+              sha256 = "sha256-YLQqQWZ5B7w0tNJGEmPNumONwX5vQPHelC12iVBGMFU=";
+            } {};
         };
       };
     in

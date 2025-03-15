@@ -3,17 +3,31 @@
 
 -- | Go from various formats to snelstart (ing)
 module SnelstartImport.Convert
-  ( toING
+  ( n26ToING,
+    sepaDirectCoreSchemeToING
   )
 where
 
 import SnelstartImport.ING
 import SnelstartImport.N26
 import Data.Text(Text)
+import SnelstartImport.SepaDirectCoreScheme (SepaDirectCoreScheme(..))
+import Data.Time
 
+sepaDirectCoreSchemeToING :: Text -> SepaDirectCoreScheme -> ING
+sepaDirectCoreSchemeToING ownAccoun SepaDirectCoreScheme{..} = ING{
+  datum = UTCTime{ utctDay = dtOfSgntr, utctDayTime = 0},
+  naamBescrhijving = dbtr,
+  rekening = ownAccoun,
+  tegenRekening  = dbtrAcct,
+  mutatieSoort = Overschijving, -- TODO how can we figure this out?
+  bijAf = Af, -- TODO looks like it only deducts from the account, is this right?
+  bedragEur = instdAmt ,
+  mededeling = ""
+  }
 
-toING :: Text -> N26 -> ING
-toING ownAccoun N26{..} = ING {
+n26ToING :: Text -> N26 -> ING
+n26ToING ownAccoun N26{..} = ING {
   datum = unDate date,
   naamBescrhijving = payee,
   rekening = ownAccoun,
