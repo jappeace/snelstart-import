@@ -90,10 +90,12 @@ postRootR = do
         renderDownloadBS formRes (LBS.fromStrict $ Char8.pack $ show $ parseTags contents)
       else case readN26BS $ LBS.fromStrict contents of
         Left err -> defaultLayout $ inputForm [pack err] enctype form
-        Right n26 -> renderDownload formRes (toING (ifBank formRes) <$> toList n26)
+        Right n26 -> renderDownload formRes (n26ToING (ifBank formRes) <$> toList n26)
 
 renderDownload :: InputFileForm -> [ING] -> Handler Html
 renderDownload form ings = renderDownloadBS form (writeCsv ings)
+
+
 
 renderDownloadBS :: InputFileForm -> LBS.ByteString -> Handler Html
 renderDownloadBS form csvOut =
