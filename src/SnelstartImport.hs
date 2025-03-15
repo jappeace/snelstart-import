@@ -31,6 +31,10 @@ readSettings = customExecParser (prefs showHelpOnError) $ info
 
 main :: IO ()
 main = do
+  putStrLn ""
+  putStrLn "starting snelstart import"
+  putStrLn ""
+
   settings <- readSettings
   case settings of
     Convert cli -> convertCli cli
