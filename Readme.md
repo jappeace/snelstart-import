@@ -28,6 +28,11 @@ generally we go:
 4. write out ING
 
 
+#### xml parsing
+choice appears to be out of
+- xml conduit, which is definetly maintained: https://hackage.haskell.org/package/xml-conduit
+- hexml, looks like it got an upload last year, so that's good https://hackage.haskell.org/package/hexml
+
 ### Tools
 Enter the nix shell.
 ```
