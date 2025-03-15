@@ -10,6 +10,7 @@ module SnelstartImport.Web.Handler
   )
 where
 
+import Text.HTML.TagSoup(parseTags)
 import Data.Vector(toList)
 import qualified Data.ByteString.Lazy as LBS
 import SnelstartImport.Convert
@@ -25,6 +26,8 @@ import Yesod.Core(defaultLayout)
 import Data.Text.Encoding
 import Data.ByteString.Base64
 import Data.Base64.Types(extractBase64)
+import qualified Data.Text as Text
+import qualified Data.ByteString.Char8 as Char8
 
 
 type Form a = Html -> MForm Handler (FormResult a, Widget)
@@ -80,25 +83,32 @@ postRootR = do
   case res of
     FormMissing     -> defaultLayout $ inputForm ["error - missing data"] enctype form
     FormFailure x   -> defaultLayout $ inputForm x enctype form
-    FormSuccess suc -> do
-      contents <- fileSourceByteString $ ifFileInfo suc
-
-      case readN26BS $ LBS.fromStrict contents of
+    FormSuccess formRes -> do
+      contents <- fileSourceByteString $ ifFileInfo formRes
+      let filename = fileName $ ifFileInfo formRes
+      if Text.isSuffixOf "xml" filename then
+        renderDownloadBS formRes (LBS.fromStrict $ Char8.pack $ show $ parseTags contents)
+      else case readN26BS $ LBS.fromStrict contents of
         Left err -> defaultLayout $ inputForm [pack err] enctype form
-        Right n26 -> let
-            csvOut :: LBS.ByteString
-            csvOut = writeCsv (toING (ifBank suc) <$> toList n26)
+        Right n26 -> renderDownload formRes (toING (ifBank formRes) <$> toList n26)
+
+renderDownload :: InputFileForm -> [ING] -> Handler Html
+renderDownload form ings = renderDownloadBS form (writeCsv ings)
+
+renderDownloadBS :: InputFileForm -> LBS.ByteString -> Handler Html
+renderDownloadBS form csvOut =
+          let
             contentText = decodeUtf8 $ LBS.toStrict csvOut
             downloadText = "data:text/plain;base64," <> (extractBase64 $ encodeBase64 $ LBS.toStrict csvOut)
           in
-            defaultLayout $ [whamlet|
+          defaultLayout $ [whamlet|
                 <table>
                   <tr>
                     <th>bank
-                    <td>#{ifBank suc}
+                    <td>#{ifBank form }
                   <tr>
                     <th>filename
-                    <td>#{fileName $ ifFileInfo suc}
+                    <td>#{fileName $ ifFileInfo form }
 
                 <h2>contents
                 <a href=#{downloadText} download="hello.txt"> Download

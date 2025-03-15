@@ -1,4 +1,6 @@
 {-# LANGUAGE DeriveAnyClass #-}
+-- | this is whatever N26 spits out, it's some custom csv format.
+--   it appears unstable. (has changed once before)
 module SnelstartImport.N26
   ( readN26,
     readN26BS,

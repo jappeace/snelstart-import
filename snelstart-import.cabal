@@ -67,6 +67,7 @@ common common-options
       yesod-core,
       blaze-html,
       yesod-form,
+      tagsoup,
       warp, 
       base64 >= 1
 
