@@ -13,7 +13,6 @@ import SnelstartImport.Currency
 import Text.XML.Hexml(parse, children, name, Node, inner)
 import Data.Text (Text)
 import Data.ByteString (ByteString)
-import Data.Text (pack)
 import Data.Text.Encoding (decodeUtf8)
 import qualified Data.Text as Text
 import Data.List

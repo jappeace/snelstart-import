@@ -1,5 +1,4 @@
 {-# LANGUAGE RecordWildCards #-}
-{-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE TypeFamilies #-}
 
@@ -20,7 +19,7 @@ import Text.Blaze.Html(Html)
 import Yesod.Form
 import Yesod.Core.Widget
 import Yesod.Core.Handler
-import Data.Text
+import Data.Text(Text, pack)
 import Data.Text.Encoding
 import Data.ByteString.Base64
 import Data.Base64.Types(extractBase64)

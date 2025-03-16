@@ -14,7 +14,6 @@ module SnelstartImport.ING
 where
 
 import SnelstartImport.Currency
-import Data.Text.Encoding (encodeUtf8)
 import Data.Text
 import Data.Text.Encoding
 import Data.Csv
@@ -99,10 +98,10 @@ instance FromField Date where
 
 
 writeCsv :: [ING] -> LBS.ByteString
-writeCsv lines = LBS.fromStrict header' <> data'
+writeCsv lines' = LBS.fromStrict header' <> data'
   where
         data' :: LBS.ByteString
-        data' = encodeWith opts lines
+        data' = encodeWith opts lines'
         header' = encodeUtf8 $ [text|"Datum","Naam / Omschrijving","Rekening","Tegenrekening","Code","Af Bij","Bedrag (EUR)","Mutatiesoort","Mededelingen"|] <> "\n"
 
 opts :: EncodeOptions
