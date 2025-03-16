@@ -94,7 +94,7 @@ library
   other-modules:
       Paths_snelstart_import
 
-executable exe
+executable snelstart-import
   import: common-options
   main-is: Main.hs
   hs-source-dirs:
