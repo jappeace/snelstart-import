@@ -29,6 +29,8 @@ import SnelstartImport.SepaDirectCoreScheme(readSepaDirectCoreScheme)
 import SnelstartImport.Web.Layout(layout)
 import Yesod.Core(lucius)
 import SnelstartImport.Web.Message
+import Data.Time
+import Control.Monad.IO.Class(liftIO)
 
 
 type Form a = Html -> MForm Handler (FormResult a, Widget)
@@ -115,17 +117,33 @@ renderDownload form ings =
             contentText = decodeUtf8 $ LBS.toStrict csvOut
             downloadText = "data:text/plain;base64," <> (extractBase64 $ encodeBase64 $ LBS.toStrict csvOut)
           in
-          layout $ [whamlet|
+          layout $ do
+            curTime <- liftIO getCurrentTime
+            let
+                timeStr :: String
+                timeStr = formatTime defaultTimeLocale "%F_%H-%M" curTime
+                downloadFileName = "snelstart-import-" <> timeStr <> ".csv"
+            toWidget [lucius|
+                pre {
+                  overflow: scroll;
+                  width: 100%;
+                  position: absolute;
+                  left: 0;
+                  background-color: lightgray;
+                  padding: 1em;
+                }
+            |]
+            [whamlet|
                 <table>
                   <tr>
-                    <th>bank
+                    <th>_{MsgBank}
                     <td>#{ifBank form }
                   <tr>
-                    <th>filename
+                    <th>_{MsgFilename}
                     <td>#{fileName $ ifFileInfo form }
 
-                <h2>contents
-                <a href=#{downloadText} download="hello.txt"> Download
+                <h2>_{MsgContents}
+                <a href=#{downloadText} download=#{downloadFileName}>_{MsgDownload}
                 <pre>
                   <code>
                     #{contentText}
