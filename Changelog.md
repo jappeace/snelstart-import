@@ -1,6 +1,9 @@
 # Change log for template project
 
-## Version 0.0.0 
+## Version 1.0.0 
 
-import [template](https://github.com/jappeace/template).
 
++ Add support n26 import
++ Add support SepaDirectCoreScheme
++ Add a web UI
++ Add CLI parser
