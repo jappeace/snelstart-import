@@ -8,9 +8,12 @@ name:           snelstart-import
 version:        1.0.0
 homepage:       https://github.com/jappeace/snelstart-import#readme
 bug-reports:    https://github.com/jappeace/snelstart-import/issues
+description:    Import to snelstart from various formats such as sepa direct debit or n26 bank format. Converts the format to ING csv. Has a server for an easy UI and a cli for quick conversions.
+synopsis:       Import to snelstart.
 author:         Jappie Klooster
 maintainer:     jappieklooster@hotmail.com
 copyright:      2020 Jappie Klooster
+category:       Finance 
 license:        MIT
 license-file:   LICENSE
 build-type:     Simple
@@ -57,20 +60,20 @@ common common-options
 
   build-depends:
       base >=4.9.1.0 && <5,
-      cassava,
-      text,
-      time, 
-      bytestring,
-      vector,
-      neat-interpolation,
-      optparse-applicative,
-      yesod-core,
-      blaze-html,
-      yesod-form,
-      hexml,
-      warp, 
-      base64 >= 1,
-      shakespeare
+      cassava < 1,
+      text < 3,
+      time < 2, 
+      bytestring < 1,
+      vector < 1,
+      neat-interpolation < 1,
+      optparse-applicative < 1,
+      yesod-core < 2,
+      blaze-html < 1,
+      yesod-form < 2,
+      hexml < 1,
+      warp < 4, 
+      base64 >= 1 && < 2,
+      shakespeare < 3
 
   default-language: Haskell2010
 
@@ -92,6 +95,8 @@ library
   hs-source-dirs:
       src
   other-modules:
+      Paths_snelstart_import
+  autogen-modules:
       Paths_snelstart_import
 
 executable snelstart-import
