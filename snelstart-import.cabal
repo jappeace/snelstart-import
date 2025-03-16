@@ -5,7 +5,7 @@ cabal-version:      3.0
 -- see: https://github.com/sol/hpack
 
 name:           snelstart-import
-version:        1.0.0
+version:        1.0.1
 homepage:       https://github.com/jappeace/snelstart-import#readme
 bug-reports:    https://github.com/jappeace/snelstart-import/issues
 description:    Import to snelstart from various formats such as sepa direct debit or n26 bank format. Converts the format to ING csv. Has a server for an easy UI and a cli for quick conversions.
@@ -22,6 +22,8 @@ extra-source-files:
     LICENSE
 extra-doc-files:
     Changelog.md
+    i18n/*.msg
+
 
 source-repository head
   type: git
