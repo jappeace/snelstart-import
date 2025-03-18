@@ -24,12 +24,13 @@ import Data.Text.Encoding
 import Data.ByteString.Base64
 import Data.Base64.Types(extractBase64)
 import qualified Data.Text as Text
-import SnelstartImport.SepaDirectCoreScheme(readSepaDirectCoreScheme)
+import SnelstartImport.SepaDirectCoreScheme(readSepaDirectCoreScheme, sdcrRows, sdcrGlob  )
 import SnelstartImport.Web.Layout(layout)
 import Yesod.Core(lucius)
 import SnelstartImport.Web.Message
 import Data.Time
 import Control.Monad.IO.Class(liftIO)
+import Data.Maybe(fromMaybe)
 
 
 type Form a = Html -> MForm Handler (FormResult a, Widget)
@@ -42,7 +43,7 @@ data InputFileForm = InputFileForm {
 
 inputFileForm :: Form InputFileForm
 inputFileForm csrf = do
-  (bankRes, bankView) <- mreq textField "own bank account" Nothing
+  (bankRes, bankView) <- mopt textField "own bank account" Nothing
   (inputRes, inputView) <- mreq fileField "xml file" Nothing
 
   let view = do
@@ -66,7 +67,7 @@ inputFileForm csrf = do
         <div>
           <button type=submit >_{MsgConvert}
   |]
-  pure $ (InputFileForm <$> bankRes <*> inputRes, view)
+  pure $ (InputFileForm <$> (Text.replace " " "" . Text.strip . fromMaybe "" <$> bankRes) <*> inputRes, view)
 
 getRootR :: Handler Html
 getRootR = do
@@ -104,7 +105,7 @@ postRootR = do
       if Text.isSuffixOf "xml" filename then
         case readSepaDirectCoreScheme contents of
           Left err -> layout $ inputForm [pack $ show err] enctype form
-          Right res' -> renderDownload formRes (sepaDirectCoreSchemeToING (ifBank formRes) <$> res')
+          Right res' -> renderDownload formRes (sepaDirectCoreSchemeToING (sdcrGlob res') <$> sdcrRows res')
       else case readN26BS $ LBS.fromStrict contents of
         Left err -> layout $ inputForm [pack err] enctype form
         Right n26 -> renderDownload formRes (n26ToING (ifBank formRes) <$> toList n26)

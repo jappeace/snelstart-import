@@ -11,19 +11,18 @@ where
 import SnelstartImport.ING
 import SnelstartImport.N26
 import Data.Text(Text)
-import SnelstartImport.SepaDirectCoreScheme (SepaDirectCoreScheme(..))
-import Data.Time
+import SnelstartImport.SepaDirectCoreScheme
 
-sepaDirectCoreSchemeToING :: Text -> SepaDirectCoreScheme -> ING
-sepaDirectCoreSchemeToING ownAccoun SepaDirectCoreScheme{..} = ING{
-  datum = UTCTime{ utctDay = dtOfSgntr, utctDayTime = 0},
+sepaDirectCoreSchemeToING :: SepaGlobals -> SepaDirectCoreScheme -> ING
+sepaDirectCoreSchemeToING SepaGlobals{..} SepaDirectCoreScheme{..} = ING{
+  datum = creDtTm ,
   naamBescrhijving = dbtr,
-  rekening = ownAccoun,
+  rekening = cdtrAcct,
   tegenRekening  = dbtrAcct,
   mutatieSoort = Overschijving, -- TODO how can we figure this out?
-  bijAf = Af, -- TODO looks like it only deducts from the account, is this right?
+  bijAf = Bij, -- appaerantly they ony use it for invoices so they add money
   bedragEur = instdAmt ,
-  mededeling = ""
+  mededeling = rmtInf
   }
 
 n26ToING :: Text -> N26 -> ING
