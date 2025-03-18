@@ -2,6 +2,7 @@
 
 ## Version 1.0.2 
 + strip whitespace from bank input
++ sepa direct only should add 
 
 ## Version 1.0.1 
 + Add language files

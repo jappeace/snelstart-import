@@ -21,7 +21,7 @@ sepaDirectCoreSchemeToING ownAccoun SepaDirectCoreScheme{..} = ING{
   rekening = ownAccoun,
   tegenRekening  = dbtrAcct,
   mutatieSoort = Overschijving, -- TODO how can we figure this out?
-  bijAf = Af, -- TODO looks like it only deducts from the account, is this right?
+  bijAf = Bij, -- appaerantly they ony use it for invoices so they add money
   bedragEur = instdAmt ,
   mededeling = ""
   }
