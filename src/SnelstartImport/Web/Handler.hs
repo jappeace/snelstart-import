@@ -66,7 +66,7 @@ inputFileForm csrf = do
         <div>
           <button type=submit >_{MsgConvert}
   |]
-  pure $ (InputFileForm <$> bankRes <*> inputRes, view)
+  pure $ (InputFileForm <$> (Text.replace " " "" . Text.strip <$> bankRes) <*> inputRes, view)
 
 getRootR :: Handler Html
 getRootR = do

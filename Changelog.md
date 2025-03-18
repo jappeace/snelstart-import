@@ -1,5 +1,8 @@
 # Change log for template project
 
+## Version 1.0.2 
++ strip whitespace from bank input
+
 ## Version 1.0.1 
 + Add language files
 
